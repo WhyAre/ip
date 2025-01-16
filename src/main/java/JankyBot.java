@@ -1,3 +1,6 @@
+import java.util.Scanner;
+import java.util.stream.Stream;
+
 public class JankyBot {
     private static final String name = "JankyBot";
 
@@ -11,6 +14,14 @@ public class JankyBot {
 
     public static void main(String[] args) {
         greet();
+
+        var sc = new Scanner(System.in);
+
+        Stream.generate(sc::next)
+                .takeWhile(input -> !input.equalsIgnoreCase("bye"))
+                .forEach(System.out::println);
+
+        sc.close();
 
         bye();
     }
