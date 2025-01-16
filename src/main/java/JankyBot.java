@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 public class JankyBot {
     private static final String name = "JankyBot";
-    private static final ArrayList<Task> memory = new ArrayList<>();
+    private static final ArrayList<Task> tasks = new ArrayList<>();
 
     static void greet() {
         System.out.printf("Hello! I'm %s\nWhat can I do for you?\n", name);
@@ -21,15 +21,15 @@ public class JankyBot {
 //    }
 
     static Task markListItem(int index, boolean isMarked) {
-        var task = memory.get(index);
+        var task = tasks.get(index);
         task.setMark(isMarked);
         return task;
     }
 
     static void printList() {
         String out = IntStream.iterate(1, x -> x + 1)
-                .limit(memory.size())
-                .mapToObj(c -> "%d. %s".formatted(c, memory.get(c - 1)))
+                .limit(tasks.size())
+                .mapToObj(c -> "%d. %s".formatted(c, tasks.get(c - 1)))
                 .reduce("%s\n%s"::formatted)
                 .orElse("");
         System.out.println(out);
@@ -38,7 +38,7 @@ public class JankyBot {
     static void printAddSuccessMsg(Task t) {
         System.out.println("Got it. I've added this task:");
         System.out.println(t);
-        System.out.printf("Now you have %d tasks in the list.\n", memory.size());
+        System.out.printf("Now you have %d tasks in the list.\n", tasks.size());
     }
 
     static void processCommand(String[] line) {
@@ -59,17 +59,17 @@ public class JankyBot {
             }
             case "todo" -> {
                 var task = TodoTask.parse(Arrays.copyOfRange(line, 1, line.length));
-                memory.add(task);
+                tasks.add(task);
                 printAddSuccessMsg(task);
             }
             case "deadline" -> {
                 var task = DeadlineTask.parse(Arrays.copyOfRange(line, 1, line.length));
-                memory.add(task);
+                tasks.add(task);
                 printAddSuccessMsg(task);
             }
             case "event" -> {
                 var task = EventTask.parse(Arrays.copyOfRange(line, 1, line.length));
-                memory.add(task);
+                tasks.add(task);
                 printAddSuccessMsg(task);
             }
             default -> {
