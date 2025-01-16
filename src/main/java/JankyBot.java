@@ -41,41 +41,50 @@ public class JankyBot {
         System.out.printf("Now you have %d tasks in the list.\n", tasks.size());
     }
 
-    static void processCommand(String[] line) {
+    static void checkHasArgs(String[] cmd, String msg) throws JankyBotException {
+        if (cmd.length <= 1) {
+            throw new JankyBotException(msg);
+        }
+    }
+
+    static void processCommand(String[] line) throws JankyBotException {
         String cmd = line[0];
 
         switch (cmd) {
             case "list" -> printList();
             case "mark" -> {
+                checkHasArgs(line, "Which task do you want to mark?");
                 int index = Integer.parseInt(line[1]) - 1;
                 var task = markListItem(index, true);
                 System.out.printf("Nice! I've marked this task as done:\n%s\n", task);
             }
             case "unmark" -> {
+                checkHasArgs(line, "Which task do you want to unmark?");
                 int index = Integer.parseInt(line[1]) - 1;
                 var task = markListItem(index, false);
                 System.out.printf("Nice! I've marked this task as not done yet:\n%s\n",
                         task);
             }
             case "todo" -> {
+                checkHasArgs(line, "Todo description cannot be empty");
                 var task = TodoTask.parse(Arrays.copyOfRange(line, 1, line.length));
                 tasks.add(task);
                 printAddSuccessMsg(task);
             }
             case "deadline" -> {
+                checkHasArgs(line, "Deadline description cannot be empty");
                 var task = DeadlineTask.parse(Arrays.copyOfRange(line, 1, line.length));
                 tasks.add(task);
                 printAddSuccessMsg(task);
             }
             case "event" -> {
+                checkHasArgs(line, "Event description cannot be empty");
                 var task = EventTask.parse(Arrays.copyOfRange(line, 1, line.length));
                 tasks.add(task);
                 printAddSuccessMsg(task);
             }
             default -> {
-                String title = String.join(" ", line);
-//                addToList(title);
-                System.out.printf("added: %s\n", title);
+                throw new JankyBotException("I don't know what that means");
             }
         }
     }
@@ -89,7 +98,13 @@ public class JankyBot {
                 .map(String::strip)
                 .takeWhile(input -> !input.equalsIgnoreCase("bye"))
                 .map(line -> line.split(" "))
-                .forEach(JankyBot::processCommand);
+                .forEach(cmd -> {
+                    try {
+                        JankyBot.processCommand(cmd);
+                    } catch (JankyBotException e) {
+                        System.out.println(e.getMessage());
+                    }
+                });
 
         sc.close();
 
