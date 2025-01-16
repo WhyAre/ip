@@ -42,26 +42,20 @@ public class JankyBot {
         Stream.generate(sc::nextLine)
                 .takeWhile(input -> !input.equalsIgnoreCase("bye"))
                 .forEach(input -> {
-                    switch (input) {
-                        case "list" -> printList();
-                        default -> {
-                            if (input.startsWith("mark")) {
-                                int index = Integer.parseInt(input.substring("mark ".length())) - 1;
-                                var task = markListItem(index, true);
-                                System.out.printf("Nice! I've marked this task as done:\n%s\n",
-                                        task);
-                            } else if (input.startsWith("unmark")) {
-                                int index =
-                                        Integer.parseInt(input.substring("unmark ".length())) - 1;
-                                var task = markListItem(index, false);
-                                System.out.printf(
-                                        "Nice! I've marked this task as not done yet:\n%s\n",
-                                        task);
-                            } else {
-                                addToList(input);
-                                System.out.printf("added: %s\n", input);
-                            }
-                        }
+                    if (input.startsWith("list")) {
+                        printList();
+                    } else if (input.startsWith("mark")) {
+                        int index = Integer.parseInt(input.substring("mark ".length())) - 1;
+                        var task = markListItem(index, true);
+                        System.out.printf("Nice! I've marked this task as done:\n%s\n", task);
+                    } else if (input.startsWith("unmark")) {
+                        int index = Integer.parseInt(input.substring("unmark ".length())) - 1;
+                        var task = markListItem(index, false);
+                        System.out.printf("Nice! I've marked this task as not done yet:\n%s\n",
+                                task);
+                    } else {
+                        addToList(input);
+                        System.out.printf("added: %s\n", input);
                     }
                 });
 
