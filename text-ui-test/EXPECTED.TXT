@@ -1,7 +1,25 @@
-Hello from
- ____        _        
-|  _ \ _   _| | _____ 
-| | | | | | | |/ / _ \
-| |_| | |_| |   <  __/
-|____/ \__,_|_|\_\___|
+Hello! I'm JankyBot
+What can I do for you?
 
+Got it. I've added this task:
+[T][ ] this is a todo task
+Now you have 1 tasks in the list.
+1. [T][ ] this is a todo task
+Nice! I've marked this task as done:
+[T][X] this is a todo task
+Got it. I've added this task:
+[D][ ] this task has a deadline (by: Some time today)
+Now you have 2 tasks in the list.
+1. [T][X] this is a todo task
+2. [D][ ] this task has a deadline (by: Some time today)
+Nice! I've marked this task as done:
+[D][X] this task has a deadline (by: Some time today)
+Got it. I've added this task:
+[E][ ] this is a task for an event (from: Some time now to: Some time later)
+Now you have 3 tasks in the list.
+Nice! I've marked this task as not done yet:
+[D][ ] this task has a deadline (by: Some time today)
+1. [T][X] this is a todo task
+2. [D][ ] this task has a deadline (by: Some time today)
+3. [E][ ] this is a task for an event (from: Some time now to: Some time later)
+Bye. Hope to see you again soon!
