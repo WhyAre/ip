@@ -4,11 +4,18 @@ import java.util.Scanner;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class JankyBot {
+public class JankBot {
     private static final String name = "JankyBot";
     private static final ArrayList<Task> tasks = new ArrayList<>();
 
     static void greet() {
+        System.out.println("""
+                     _   _    _   _ _  __
+                    | | / \\  | \\ | | |/ /
+                 _  | |/ _ \\ |  \\| | ' /
+                | |_| / ___ \\| |\\  | . \\
+                 \\___/_/   \\_\\_| \\_|_|\\_\\
+                """);
         System.out.printf("Hello! I'm %s\nWhat can I do for you?\n", name);
     }
 
@@ -111,7 +118,7 @@ public class JankyBot {
                 .map(line -> line.split(" "))
                 .forEach(cmd -> {
                     try {
-                        JankyBot.processCommand(cmd);
+                        JankBot.processCommand(cmd);
                     } catch (JankyBotException e) {
                         System.out.println(e.getMessage());
                     }
