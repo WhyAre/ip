@@ -35,6 +35,12 @@ public class JankyBot {
         System.out.println(out);
     }
 
+    static void printDelSuccessMsg(Task t) {
+        System.out.println("Noted. I've removed this task:");
+        System.out.println(t);
+        System.out.printf("Now you have %d tasks in the list.\n", tasks.size());
+    }
+
     static void printAddSuccessMsg(Task t) {
         System.out.println("Got it. I've added this task:");
         System.out.println(t);
@@ -52,6 +58,11 @@ public class JankyBot {
 
         switch (cmd) {
             case "list" -> printList();
+            case "delete" -> {
+                checkHasArgs(line, "Which task do you want to delete?");
+                int index = Integer.parseInt(line[1]) - 1;
+                printDelSuccessMsg(tasks.remove(index));
+            }
             case "mark" -> {
                 checkHasArgs(line, "Which task do you want to mark?");
                 int index = Integer.parseInt(line[1]) - 1;
