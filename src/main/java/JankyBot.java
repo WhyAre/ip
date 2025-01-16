@@ -34,52 +34,63 @@ public class JankyBot {
         System.out.println(out);
     }
 
+    static void processCommand(String[] line) {
+        String cmd = line[0];
+
+        switch (cmd) {
+            case "list" -> printList();
+            case "mark" -> {
+                int index = Integer.parseInt(line[1]) - 1;
+                var task = markListItem(index, true);
+                System.out.printf("Nice! I've marked this task as done:\n%s\n", task);
+            }
+            case "unmark" -> {
+                int index = Integer.parseInt(line[1]) - 1;
+                var task = markListItem(index, false);
+                System.out.printf("Nice! I've marked this task as not done yet:\n%s\n",
+                        task);
+            }
+            default -> {
+                String title = String.join(" ", line);
+                addToList(title);
+                System.out.printf("added: %s\n", title);
+            }
+        }
+    }
+
     public static void main(String[] args) {
         greet();
 
         var sc = new Scanner(System.in);
 
         Stream.generate(sc::nextLine)
+                .map(String::strip)
                 .takeWhile(input -> !input.equalsIgnoreCase("bye"))
-                .forEach(input -> {
-                    if (input.startsWith("list")) {
-                        printList();
-                    } else if (input.startsWith("mark")) {
-                        int index = Integer.parseInt(input.substring("mark ".length())) - 1;
-                        var task = markListItem(index, true);
-                        System.out.printf("Nice! I've marked this task as done:\n%s\n", task);
-                    } else if (input.startsWith("unmark")) {
-                        int index = Integer.parseInt(input.substring("unmark ".length())) - 1;
-                        var task = markListItem(index, false);
-                        System.out.printf("Nice! I've marked this task as not done yet:\n%s\n",
-                                task);
-                    } else {
-                        addToList(input);
-                        System.out.printf("added: %s\n", input);
-                    }
-                });
+                .map(line -> line.split(" "))
+                .forEach(JankyBot::processCommand);
 
         sc.close();
 
         bye();
     }
 
-    record Task(String title, boolean isMarked) {
-        Task(String title) {
-            this(title, false);
-        }
+}
 
-        Task setMark(boolean isMarked) {
-            return new Task(this.title, isMarked);
-        }
+record Task(String title, boolean isMarked) {
+    Task(String title) {
+        this(title, false);
+    }
 
-        private char getStatusIcon() {
-            return (this.isMarked ? 'X' : ' ');
-        }
+    Task setMark(boolean isMarked) {
+        return new Task(this.title, isMarked);
+    }
 
-        @Override
-        public String toString() {
-            return "[%s] %s".formatted(this.getStatusIcon(), this.title);
-        }
+    private char getStatusIcon() {
+        return (this.isMarked ? 'X' : ' ');
+    }
+
+    @Override
+    public String toString() {
+        return "[%s] %s".formatted(this.getStatusIcon(), this.title);
     }
 }
