@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -15,14 +16,14 @@ public class JankyBot {
         System.out.println("Bye. Hope to see you again soon!");
     }
 
-    static void addToList(String line) {
-        memory.add(new Task(line));
-    }
+//    static void addToList(String line) {
+//        memory.add(new Task(line));
+//    }
 
     static Task markListItem(int index, boolean isMarked) {
-        var newTask = memory.get(index).setMark(isMarked);
-        memory.set(index, newTask);
-        return newTask;
+        var task = memory.get(index);
+        task.setMark(isMarked);
+        return task;
     }
 
     static void printList() {
@@ -32,6 +33,12 @@ public class JankyBot {
                 .reduce("%s\n%s"::formatted)
                 .orElse("");
         System.out.println(out);
+    }
+
+    static void printAddSuccessMsg(Task t) {
+        System.out.println("Got it. I've added this task:");
+        System.out.println(t);
+        System.out.printf("Now you have %d tasks in the list.\n", memory.size());
     }
 
     static void processCommand(String[] line) {
@@ -50,9 +57,24 @@ public class JankyBot {
                 System.out.printf("Nice! I've marked this task as not done yet:\n%s\n",
                         task);
             }
+            case "todo" -> {
+                var task = TodoTask.parse(Arrays.copyOfRange(line, 1, line.length));
+                memory.add(task);
+                printAddSuccessMsg(task);
+            }
+            case "deadline" -> {
+                var task = DeadlineTask.parse(Arrays.copyOfRange(line, 1, line.length));
+                memory.add(task);
+                printAddSuccessMsg(task);
+            }
+            case "event" -> {
+                var task = EventTask.parse(Arrays.copyOfRange(line, 1, line.length));
+                memory.add(task);
+                printAddSuccessMsg(task);
+            }
             default -> {
                 String title = String.join(" ", line);
-                addToList(title);
+//                addToList(title);
                 System.out.printf("added: %s\n", title);
             }
         }
@@ -74,23 +96,4 @@ public class JankyBot {
         bye();
     }
 
-}
-
-record Task(String title, boolean isMarked) {
-    Task(String title) {
-        this(title, false);
-    }
-
-    Task setMark(boolean isMarked) {
-        return new Task(this.title, isMarked);
-    }
-
-    private char getStatusIcon() {
-        return (this.isMarked ? 'X' : ' ');
-    }
-
-    @Override
-    public String toString() {
-        return "[%s] %s".formatted(this.getStatusIcon(), this.title);
-    }
 }
