@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -37,8 +38,7 @@ public class JankBot {
         String out = IntStream.iterate(1, x -> x + 1)
                 .limit(tasks.size())
                 .mapToObj(c -> "%d. %s".formatted(c, tasks.get(c - 1)))
-                .reduce("%s\n%s"::formatted)
-                .orElse("");
+                .collect(Collectors.joining("\n"));
         System.out.println(out);
     }
 
