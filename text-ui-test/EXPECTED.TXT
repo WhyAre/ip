@@ -4,7 +4,7 @@
 | |_| / ___ \| |\  | . \
  \___/_/   \_\_| \_|_|\_\
 
-Hello! I'm JankyBot
+Hello! I'm JankBot
 What can I do for you?
 
 Got it. I've added this task:

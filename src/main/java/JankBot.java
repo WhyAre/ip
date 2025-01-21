@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class JankBot {
-    private static final String name = "JankyBot";
+    private static final String name = "JankBot";
     private static final ArrayList<Task> tasks = new ArrayList<>();
 
     static void greet() {
@@ -54,13 +54,13 @@ public class JankBot {
         System.out.printf("Now you have %d tasks in the list.\n", tasks.size());
     }
 
-    static void checkHasArgs(String[] cmd, String msg) throws JankyBotException {
+    static void checkHasArgs(String[] cmd, String msg) throws JankBotException {
         if (cmd.length <= 1) {
-            throw new JankyBotException(msg);
+            throw new JankBotException(msg);
         }
     }
 
-    static void processCommand(String[] line) throws JankyBotException {
+    static void processCommand(String[] line) throws JankBotException {
         String cmd = line[0];
 
         switch (cmd) {
@@ -102,7 +102,7 @@ public class JankBot {
                 printAddSuccessMsg(task);
             }
             default -> {
-                throw new JankyBotException("I don't know what that means");
+                throw new JankBotException("I don't know what that means");
             }
         }
     }
@@ -119,7 +119,7 @@ public class JankBot {
                 .forEach(cmd -> {
                     try {
                         JankBot.processCommand(cmd);
-                    } catch (JankyBotException e) {
+                    } catch (JankBotException e) {
                         System.out.println(e.getMessage());
                     }
                 });
