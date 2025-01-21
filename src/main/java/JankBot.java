@@ -37,7 +37,7 @@ public class JankBot {
     static void printList() {
         String out = IntStream.iterate(1, x -> x + 1)
                 .limit(tasks.size())
-                .mapToObj(c -> "%d. %s".formatted(c, tasks.get(c - 1)))
+                .mapToObj(i -> "%d. %s".formatted(i, tasks.get(i - 1)))
                 .collect(Collectors.joining("\n"));
         System.out.println(out);
     }
