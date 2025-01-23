@@ -1,3 +1,5 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,5 +26,15 @@ public class TaskImpl {
         return map.entrySet()
                 .stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, x -> x.getValue().toString().strip()));
+    }
+
+    static LocalDateTime parseDate(String dateStr) {
+        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return LocalDateTime.parse(dateStr, formatter);
+    }
+
+    static String formatDate(LocalDateTime dateTime) {
+        var formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mma");
+        return dateTime.format(formatter);
     }
 }

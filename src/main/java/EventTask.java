@@ -1,8 +1,10 @@
-public class EventTask extends Task {
-    private final String from;
-    private final String to;
+import java.time.LocalDateTime;
 
-    EventTask(String title, String from, String to) {
+public class EventTask extends Task {
+    private final LocalDateTime from;
+    private final LocalDateTime to;
+
+    EventTask(String title, LocalDateTime from, LocalDateTime to) {
         super(title);
         this.from = from;
         this.to = to;
@@ -10,12 +12,15 @@ public class EventTask extends Task {
 
     static Task parse(String[] line) {
         var parts = TaskImpl.split(line, new String[]{"/from", "/to"});
-        return new EventTask(parts.get(""), parts.get("/from"), parts.get("/to"));
+        var from = TaskImpl.parseDate(parts.get("/from"));
+        var to = TaskImpl.parseDate(parts.get("/to"));
+        return new EventTask(parts.get(""), from, to);
     }
 
     @Override
     public String toString() {
-        return "[E]%s (from: %s to: %s)".formatted(super.toString(), from, to);
+        return "[E]%s (from: %s to: %s)".formatted(super.toString(), TaskImpl.formatDate(from),
+                TaskImpl.formatDate(to));
     }
 
 
