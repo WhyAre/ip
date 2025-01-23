@@ -42,4 +42,8 @@ public class TaskList implements Serializable {
                 .collect(Collectors.joining("\n"));
         System.out.println(out);
     }
+
+    int size() {
+        return tasks.size();
+    }
 }
