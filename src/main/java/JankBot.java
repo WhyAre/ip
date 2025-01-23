@@ -1,15 +1,5 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 
@@ -17,28 +7,8 @@ public class JankBot {
     private static final String TASK_FILE = "./data/jank.txt";
 
     private static final String name = "JankBot";
-    private static final ArrayList<Task> tasks = loadTasks(TASK_FILE);
+    private static final TaskList tasks = Storage.loadTasks(TASK_FILE);
 
-    static ArrayList<Task> loadTasks(String filepath) {
-        try (var fin = new FileInputStream(filepath); var ois = new ObjectInputStream(fin)) {
-            return (ArrayList<Task>) ois.readObject();
-        } catch (FileNotFoundException e) {
-            return new ArrayList<>();
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    static void saveTasks(String filepath, ArrayList<Task> tasks) throws JankBotException {
-        var file = new File(filepath);
-        file.getParentFile().mkdirs(); // Will create parent directories if not exists
-
-        try (var fout = new FileOutputStream(file); var oos = new ObjectOutputStream(fout)) {
-            oos.writeObject(tasks);
-        } catch (IOException e) {
-            throw new JankBotException("Fail to save task");
-        }
-    }
 
     static void greet() {
         System.out.println("""
@@ -53,21 +23,6 @@ public class JankBot {
 
     static void bye() {
         System.out.println("Bye. Hope to see you again soon!");
-    }
-
-    static Task markListItem(int index, boolean isMarked) throws JankBotException {
-        var task = tasks.get(index);
-        task.setMark(isMarked);
-        saveTasks(TASK_FILE, tasks);
-        return task;
-    }
-
-    static void printList() {
-        String out = IntStream.iterate(1, x -> x + 1)
-                .limit(tasks.size())
-                .mapToObj(i -> "%d. %s".formatted(i, tasks.get(i - 1)))
-                .collect(Collectors.joining("\n"));
-        System.out.println(out);
     }
 
     static void printDelSuccessMsg(Task t) {
@@ -92,44 +47,43 @@ public class JankBot {
         String cmd = line[0];
 
         switch (cmd) {
-            case "list" -> printList();
+            case "list" -> tasks.print();
             case "delete" -> {
                 checkHasArgs(line, "Which task do you want to delete?");
                 int index = Integer.parseInt(line[1]) - 1;
                 printDelSuccessMsg(tasks.remove(index));
+                Storage.saveTasks(TASK_FILE, tasks);
             }
             case "mark" -> {
                 checkHasArgs(line, "Which task do you want to mark?");
                 int index = Integer.parseInt(line[1]) - 1;
-                var task = markListItem(index, true);
-                System.out.printf("Nice! I've marked this task as done:\n%s\n", task);
+                System.out.printf("Nice! I've marked this task as done:\n%s\n", tasks.mark(index));
+                Storage.saveTasks(TASK_FILE, tasks);
             }
             case "unmark" -> {
                 checkHasArgs(line, "Which task do you want to unmark?");
                 int index = Integer.parseInt(line[1]) - 1;
-                var task = markListItem(index, false);
-                System.out.printf("Nice! I've marked this task as not done yet:\n%s\n", task);
+                System.out.printf("Nice! I've marked this task as not done yet:\n%s\n",
+                        tasks.unmark(index));
+                Storage.saveTasks(TASK_FILE, tasks);
             }
             case "todo" -> {
                 checkHasArgs(line, "Todo description cannot be empty");
                 var task = TodoTask.parse(Arrays.copyOfRange(line, 1, line.length));
-                tasks.add(task);
-                saveTasks(TASK_FILE, tasks);
-                printAddSuccessMsg(task);
+                printAddSuccessMsg(tasks.add(task));
+                Storage.saveTasks(TASK_FILE, tasks);
             }
             case "deadline" -> {
                 checkHasArgs(line, "Deadline description cannot be empty");
                 var task = DeadlineTask.parse(Arrays.copyOfRange(line, 1, line.length));
-                tasks.add(task);
-                saveTasks(TASK_FILE, tasks);
-                printAddSuccessMsg(task);
+                printAddSuccessMsg(tasks.add(task));
+                Storage.saveTasks(TASK_FILE, tasks);
             }
             case "event" -> {
                 checkHasArgs(line, "Event description cannot be empty");
                 var task = EventTask.parse(Arrays.copyOfRange(line, 1, line.length));
-                tasks.add(task);
-                saveTasks(TASK_FILE, tasks);
-                printAddSuccessMsg(task);
+                printAddSuccessMsg(tasks.add(task));
+                Storage.saveTasks(TASK_FILE, tasks);
             }
             default -> {
                 throw new JankBotException("I don't know what that means");
