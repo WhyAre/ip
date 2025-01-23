@@ -1,8 +1,9 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class TaskList {
+public class TaskList implements Serializable {
     private final ArrayList<Task> tasks;
 
     TaskList() {
