@@ -19,6 +19,10 @@ public class TaskList implements Serializable {
         return task;
     }
 
+    Task remove(int index) {
+        return tasks.remove(index);
+    }
+
     Task mark(int index) {
         var task = tasks.get(index);
         task.setMark(true);
