@@ -14,16 +14,21 @@ public class TaskList implements Serializable {
         this.tasks = tasks;
     }
 
-    void add(Task task) {
+    Task add(Task task) {
         tasks.add(task);
+        return task;
     }
 
-    void mark(int index) {
-        tasks.get(index).setMark(true);
+    Task mark(int index) {
+        var task = tasks.get(index);
+        task.setMark(true);
+        return task;
     }
 
-    void unmark(int index) {
-        tasks.get(index).setMark(false);
+    Task unmark(int index) {
+        var task = tasks.get(index);
+        task.setMark(false);
+        return task;
     }
 
     void print() {
