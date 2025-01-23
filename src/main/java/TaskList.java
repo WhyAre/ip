@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class TaskList {
     private final ArrayList<Task> tasks;
@@ -21,5 +23,13 @@ public class TaskList {
 
     void unmark(int index) {
         tasks.get(index).setMark(false);
+    }
+
+    void print() {
+        String out = IntStream.iterate(1, x -> x + 1)
+                .limit(tasks.size())
+                .mapToObj(i -> "%d. %s".formatted(i, tasks.get(i - 1)))
+                .collect(Collectors.joining("\n"));
+        System.out.println(out);
     }
 }
