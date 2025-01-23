@@ -1,3 +1,5 @@
+package jank;
+
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.stream.Stream;
@@ -6,7 +8,7 @@ import java.util.stream.Stream;
 public class JankBot {
     private static final String TASK_FILE = "./data/jank.txt";
 
-    private static final String name = "JankBot";
+    private static final String name = "jank.JankBot";
     private static final TaskList tasks = Storage.loadTasks(TASK_FILE);
 
 

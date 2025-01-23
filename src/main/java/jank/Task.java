@@ -1,3 +1,5 @@
+package jank;
+
 import java.io.Serializable;
 
 abstract public class Task implements Serializable {
