@@ -36,6 +36,10 @@ public class TaskList implements Serializable {
     }
 
     void print() {
+        if (tasks.size() <= 0) {
+            System.out.println("There are no tasks");
+            return;
+        }
         String out = IntStream.iterate(1, x -> x + 1)
                 .limit(tasks.size())
                 .mapToObj(i -> "%d. %s".formatted(i, tasks.get(i - 1)))
