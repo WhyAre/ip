@@ -5,20 +5,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 
 public class Storage {
-    static ArrayList<Task> loadTasks(String filepath) {
+    static TaskList loadTasks(String filepath) {
         try (var fin = new FileInputStream(filepath); var ois = new ObjectInputStream(fin)) {
-            return (ArrayList<Task>) ois.readObject();
+            if (ois.readObject() instanceof TaskList tasklist) {
+                return tasklist;
+            }
+            return new TaskList();
         } catch (FileNotFoundException e) {
-            return new ArrayList<>();
+            return new TaskList();
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
     }
 
-    static void saveTasks(String filepath, ArrayList<Task> tasks) throws JankBotException {
+    static void saveTasks(String filepath, TaskList tasks) throws JankBotException {
         var file = new File(filepath);
         file.getParentFile().mkdirs(); // Will create parent directories if not exists
 
