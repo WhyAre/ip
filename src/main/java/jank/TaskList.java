@@ -2,17 +2,18 @@ package jank;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class TaskList implements Serializable {
-    private final ArrayList<Task> tasks;
+    private final List<Task> tasks;
 
     TaskList() {
         this(new ArrayList<>());
     }
 
-    TaskList(ArrayList<Task> tasks) {
+    TaskList(List<Task> tasks) {
         this.tasks = tasks;
     }
 
