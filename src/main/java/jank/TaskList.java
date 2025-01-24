@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * Class that wraps a list of tasks
+ */
 public class TaskList implements Serializable {
     private final List<Task> tasks;
 
@@ -44,9 +47,9 @@ public class TaskList implements Serializable {
             return;
         }
         String out = IntStream.iterate(1, x -> x + 1)
-                .limit(tasks.size())
-                .mapToObj(i -> "%d. %s".formatted(i, tasks.get(i - 1)))
-                .collect(Collectors.joining("\n"));
+                              .limit(tasks.size())
+                              .mapToObj(i -> "%d. %s".formatted(i, tasks.get(i - 1)))
+                              .collect(Collectors.joining("\n"));
         System.out.println(out);
     }
 

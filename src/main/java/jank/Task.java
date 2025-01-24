@@ -2,7 +2,10 @@ package jank;
 
 import java.io.Serializable;
 
-abstract public class Task implements Serializable {
+/**
+ * Task superclass
+ */
+public abstract class Task implements Serializable {
     private final String title;
     private boolean isMarked;
 

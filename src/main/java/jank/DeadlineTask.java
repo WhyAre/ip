@@ -2,8 +2,11 @@ package jank;
 
 import java.time.LocalDateTime;
 
+/**
+ * Task with due date
+ */
 public class DeadlineTask extends Task {
-    LocalDateTime deadline;
+    private LocalDateTime deadline;
 
     DeadlineTask(String title, LocalDateTime deadline) {
         super(title);
