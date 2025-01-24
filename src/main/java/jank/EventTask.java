@@ -2,6 +2,9 @@ package jank;
 
 import java.time.LocalDateTime;
 
+/**
+ * Task with start and end date time
+ */
 public class EventTask extends Task {
     private final LocalDateTime from;
     private final LocalDateTime to;

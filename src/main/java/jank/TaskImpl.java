@@ -8,12 +8,14 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Helper functions for tasks
+ */
 public class TaskImpl {
     static Map<String, String> split(String[] line, String[] delims) {
         var map = Arrays.stream(delims)
-                .collect(Collectors.toMap(Function.identity(), x -> new StringBuffer(),
-                        (left, right) -> right,
-                        HashMap<String, StringBuffer>::new));
+                        .collect(Collectors.toMap(Function.identity(), x -> new StringBuffer(), (left, right) -> right,
+                                HashMap<String, StringBuffer>::new));
         map.put("", new StringBuffer());
 
         var curKey = "";
@@ -26,8 +28,8 @@ public class TaskImpl {
         }
 
         return map.entrySet()
-                .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, x -> x.getValue().toString().strip()));
+                  .stream()
+                  .collect(Collectors.toMap(Map.Entry::getKey, x -> x.getValue().toString().strip()));
     }
 
     static LocalDateTime parseDate(String dateStr) {

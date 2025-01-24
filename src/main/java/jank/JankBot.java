@@ -5,6 +5,9 @@ import java.util.Scanner;
 import java.util.stream.Stream;
 
 
+/**
+ * Main Bot
+ */
 public class JankBot {
     private static final String TASK_FILE = "./data/jank.txt";
 
@@ -49,47 +52,46 @@ public class JankBot {
         String cmd = line[0];
 
         switch (cmd) {
-            case "list" -> tasks.print();
-            case "delete" -> {
-                checkHasArgs(line, "Which task do you want to delete?");
-                int index = Integer.parseInt(line[1]) - 1;
-                printDelSuccessMsg(tasks.remove(index));
-                Storage.saveTasks(TASK_FILE, tasks);
-            }
-            case "mark" -> {
-                checkHasArgs(line, "Which task do you want to mark?");
-                int index = Integer.parseInt(line[1]) - 1;
-                System.out.printf("Nice! I've marked this task as done:\n%s\n", tasks.mark(index));
-                Storage.saveTasks(TASK_FILE, tasks);
-            }
-            case "unmark" -> {
-                checkHasArgs(line, "Which task do you want to unmark?");
-                int index = Integer.parseInt(line[1]) - 1;
-                System.out.printf("Nice! I've marked this task as not done yet:\n%s\n",
-                        tasks.unmark(index));
-                Storage.saveTasks(TASK_FILE, tasks);
-            }
-            case "todo" -> {
-                checkHasArgs(line, "Todo description cannot be empty");
-                var task = TodoTask.parse(Arrays.copyOfRange(line, 1, line.length));
-                printAddSuccessMsg(tasks.add(task));
-                Storage.saveTasks(TASK_FILE, tasks);
-            }
-            case "deadline" -> {
-                checkHasArgs(line, "Deadline description cannot be empty");
-                var task = DeadlineTask.parse(Arrays.copyOfRange(line, 1, line.length));
-                printAddSuccessMsg(tasks.add(task));
-                Storage.saveTasks(TASK_FILE, tasks);
-            }
-            case "event" -> {
-                checkHasArgs(line, "Event description cannot be empty");
-                var task = EventTask.parse(Arrays.copyOfRange(line, 1, line.length));
-                printAddSuccessMsg(tasks.add(task));
-                Storage.saveTasks(TASK_FILE, tasks);
-            }
-            default -> {
-                throw new JankBotException("I don't know what that means");
-            }
+        case "list" -> tasks.print();
+        case "delete" -> {
+            checkHasArgs(line, "Which task do you want to delete?");
+            int index = Integer.parseInt(line[1]) - 1;
+            printDelSuccessMsg(tasks.remove(index));
+            Storage.saveTasks(TASK_FILE, tasks);
+        }
+        case "mark" -> {
+            checkHasArgs(line, "Which task do you want to mark?");
+            int index = Integer.parseInt(line[1]) - 1;
+            System.out.printf("Nice! I've marked this task as done:\n%s\n", tasks.mark(index));
+            Storage.saveTasks(TASK_FILE, tasks);
+        }
+        case "unmark" -> {
+            checkHasArgs(line, "Which task do you want to unmark?");
+            int index = Integer.parseInt(line[1]) - 1;
+            System.out.printf("Nice! I've marked this task as not done yet:\n%s\n", tasks.unmark(index));
+            Storage.saveTasks(TASK_FILE, tasks);
+        }
+        case "todo" -> {
+            checkHasArgs(line, "Todo description cannot be empty");
+            var task = TodoTask.parse(Arrays.copyOfRange(line, 1, line.length));
+            printAddSuccessMsg(tasks.add(task));
+            Storage.saveTasks(TASK_FILE, tasks);
+        }
+        case "deadline" -> {
+            checkHasArgs(line, "Deadline description cannot be empty");
+            var task = DeadlineTask.parse(Arrays.copyOfRange(line, 1, line.length));
+            printAddSuccessMsg(tasks.add(task));
+            Storage.saveTasks(TASK_FILE, tasks);
+        }
+        case "event" -> {
+            checkHasArgs(line, "Event description cannot be empty");
+            var task = EventTask.parse(Arrays.copyOfRange(line, 1, line.length));
+            printAddSuccessMsg(tasks.add(task));
+            Storage.saveTasks(TASK_FILE, tasks);
+        }
+        default -> {
+            throw new JankBotException("I don't know what that means");
+        }
         }
     }
 
@@ -99,16 +101,16 @@ public class JankBot {
         var sc = new Scanner(System.in);
 
         Stream.generate(sc::nextLine)
-                .map(String::strip)
-                .takeWhile(input -> !input.equalsIgnoreCase("bye"))
-                .map(line -> line.split(" "))
-                .forEach(cmd -> {
-                    try {
-                        JankBot.processCommand(cmd);
-                    } catch (JankBotException e) {
-                        System.out.println(e.getMessage());
-                    }
-                });
+              .map(String::strip)
+              .takeWhile(input -> !input.equalsIgnoreCase("bye"))
+              .map(line -> line.split(" "))
+              .forEach(cmd -> {
+                  try {
+                      JankBot.processCommand(cmd);
+                  } catch (JankBotException e) {
+                      System.out.println(e.getMessage());
+                  }
+              });
 
         sc.close();
 

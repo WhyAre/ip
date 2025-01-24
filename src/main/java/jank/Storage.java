@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * Handles the loading and storing of the tasks to secondary storage
+ */
 public class Storage {
     static TaskList loadTasks(String filepath) {
         try (var fin = new FileInputStream(filepath); var ois = new ObjectInputStream(fin)) {
