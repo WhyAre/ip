@@ -5,6 +5,9 @@ import java.util.Scanner;
 import java.util.stream.Stream;
 
 
+/**
+ * Main Bot
+ */
 public class JankBot {
     private static final String TASK_FILE = "./data/jank.txt";
 
@@ -49,47 +52,58 @@ public class JankBot {
         String cmd = line[0];
 
         switch (cmd) {
-            case "list" -> tasks.print();
-            case "delete" -> {
-                checkHasArgs(line, "Which task do you want to delete?");
-                int index = Integer.parseInt(line[1]) - 1;
-                printDelSuccessMsg(tasks.remove(index));
-                Storage.saveTasks(TASK_FILE, tasks);
+        case "list" -> tasks.print();
+        case "find" -> {
+            checkHasArgs(line, "Where's the query?");
+            String query = String.join(" ", Arrays.copyOfRange(line, 1, line.length));
+            var matchingTasks = tasks.find(query);
+
+            if (matchingTasks.isEmpty()) {
+                System.out.println("No matching tasks found.");
+            } else {
+                System.out.println("Here are the matching tasks in your list:");
+                matchingTasks.forEach(System.out::println);
             }
-            case "mark" -> {
-                checkHasArgs(line, "Which task do you want to mark?");
-                int index = Integer.parseInt(line[1]) - 1;
-                System.out.printf("Nice! I've marked this task as done:\n%s\n", tasks.mark(index));
-                Storage.saveTasks(TASK_FILE, tasks);
-            }
-            case "unmark" -> {
-                checkHasArgs(line, "Which task do you want to unmark?");
-                int index = Integer.parseInt(line[1]) - 1;
-                System.out.printf("Nice! I've marked this task as not done yet:\n%s\n",
-                        tasks.unmark(index));
-                Storage.saveTasks(TASK_FILE, tasks);
-            }
-            case "todo" -> {
-                checkHasArgs(line, "Todo description cannot be empty");
-                var task = TodoTask.parse(Arrays.copyOfRange(line, 1, line.length));
-                printAddSuccessMsg(tasks.add(task));
-                Storage.saveTasks(TASK_FILE, tasks);
-            }
-            case "deadline" -> {
-                checkHasArgs(line, "Deadline description cannot be empty");
-                var task = DeadlineTask.parse(Arrays.copyOfRange(line, 1, line.length));
-                printAddSuccessMsg(tasks.add(task));
-                Storage.saveTasks(TASK_FILE, tasks);
-            }
-            case "event" -> {
-                checkHasArgs(line, "Event description cannot be empty");
-                var task = EventTask.parse(Arrays.copyOfRange(line, 1, line.length));
-                printAddSuccessMsg(tasks.add(task));
-                Storage.saveTasks(TASK_FILE, tasks);
-            }
-            default -> {
-                throw new JankBotException("I don't know what that means");
-            }
+        }
+        case "delete" -> {
+            checkHasArgs(line, "Which task do you want to delete?");
+            int index = Integer.parseInt(line[1]) - 1;
+            printDelSuccessMsg(tasks.remove(index));
+            Storage.saveTasks(TASK_FILE, tasks);
+        }
+        case "mark" -> {
+            checkHasArgs(line, "Which task do you want to mark?");
+            int index = Integer.parseInt(line[1]) - 1;
+            System.out.printf("Nice! I've marked this task as done:\n%s\n", tasks.mark(index));
+            Storage.saveTasks(TASK_FILE, tasks);
+        }
+        case "unmark" -> {
+            checkHasArgs(line, "Which task do you want to unmark?");
+            int index = Integer.parseInt(line[1]) - 1;
+            System.out.printf("Nice! I've marked this task as not done yet:\n%s\n", tasks.unmark(index));
+            Storage.saveTasks(TASK_FILE, tasks);
+        }
+        case "todo" -> {
+            checkHasArgs(line, "Todo description cannot be empty");
+            var task = TodoTask.parse(Arrays.copyOfRange(line, 1, line.length));
+            printAddSuccessMsg(tasks.add(task));
+            Storage.saveTasks(TASK_FILE, tasks);
+        }
+        case "deadline" -> {
+            checkHasArgs(line, "Deadline description cannot be empty");
+            var task = DeadlineTask.parse(Arrays.copyOfRange(line, 1, line.length));
+            printAddSuccessMsg(tasks.add(task));
+            Storage.saveTasks(TASK_FILE, tasks);
+        }
+        case "event" -> {
+            checkHasArgs(line, "Event description cannot be empty");
+            var task = EventTask.parse(Arrays.copyOfRange(line, 1, line.length));
+            printAddSuccessMsg(tasks.add(task));
+            Storage.saveTasks(TASK_FILE, tasks);
+        }
+        default -> {
+            throw new JankBotException("I don't know what that means");
+        }
         }
     }
 

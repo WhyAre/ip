@@ -38,6 +38,18 @@ public class TaskList implements Serializable {
         return task;
     }
 
+    /**
+     * Returns a list of task which has the query in the title
+     *
+     * @param query Query string
+     * @return list of tasks
+     */
+    List<Task> find(String query) {
+        return tasks.stream()
+                    .filter(task -> task.contains(query))
+                    .toList();
+    }
+
     void print() {
         if (tasks.size() <= 0) {
             System.out.println("There are no tasks");
