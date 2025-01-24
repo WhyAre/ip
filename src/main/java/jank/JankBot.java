@@ -53,6 +53,18 @@ public class JankBot {
 
         switch (cmd) {
         case "list" -> tasks.print();
+        case "find" -> {
+            checkHasArgs(line, "Where's the query?");
+            String query = String.join(" ", Arrays.copyOfRange(line, 1, line.length));
+            var matchingTasks = tasks.find(query);
+
+            if (matchingTasks.isEmpty()) {
+                System.out.println("No matching tasks found.");
+            } else {
+                System.out.println("Here are the matching tasks in your list:");
+                matchingTasks.forEach(System.out::println);
+            }
+        }
         case "delete" -> {
             checkHasArgs(line, "Which task do you want to delete?");
             int index = Integer.parseInt(line[1]) - 1;

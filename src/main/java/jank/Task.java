@@ -22,6 +22,16 @@ public abstract class Task implements Serializable {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Checks whether input is in the title
+     *
+     * @param query Input query
+     * @return boolean whether the input appears in the title
+     */
+    boolean contains(String query) {
+        return title.contains(query);
+    }
+
     void setMark(boolean isMarked) {
         this.isMarked = isMarked;
     }
