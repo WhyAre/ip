@@ -42,7 +42,7 @@ public class TaskList implements Serializable {
     }
 
     void print() {
-        if (tasks.size() <= 0) {
+        if (tasks.isEmpty()) {
             System.out.println("There are no tasks");
             return;
         }
