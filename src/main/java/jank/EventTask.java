@@ -15,12 +15,6 @@ public class EventTask extends Task {
         this.to = to;
     }
 
-    static Task parse(String[] line) {
-        var parts = TaskImpl.split(line, new String[]{"/from", "/to"});
-        var from = TaskImpl.parseDate(parts.get("/from"));
-        var to = TaskImpl.parseDate(parts.get("/to"));
-        return new EventTask(parts.get(""), from, to);
-    }
 
     @Override
     public String toString() {

@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Task superclass
  */
-public abstract class Task implements Serializable {
+public class Task implements Serializable {
     private final String title;
     private boolean isMarked;
 
@@ -16,10 +16,6 @@ public abstract class Task implements Serializable {
     Task(String title, boolean isMarked) {
         this.title = title;
         this.isMarked = isMarked;
-    }
-
-    static Task parse(String[] line) {
-        throw new UnsupportedOperationException();
     }
 
     /**

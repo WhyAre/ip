@@ -1,6 +1,5 @@
 package jank;
 
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
@@ -57,18 +56,6 @@ public class JankBot {
         System.out.printf("Now you have %d tasks in the list.\n", tasks.size());
     }
 
-    /**
-     * Checks whether there is arguments in the cmd
-     *
-     * @param cmd command supplied
-     * @param msg error message if the command has no arguments
-     * @throws JankBotException
-     */
-    static void checkHasArgs(String[] cmd, String msg) throws JankBotException {
-        if (cmd.length <= 1) {
-            throw new JankBotException(msg);
-        }
-    }
 
     /**
      * Performs the action that's supplied into the function
@@ -82,9 +69,8 @@ public class JankBot {
         switch (cmd) {
         case "list" -> tasks.print();
         case "find" -> {
-            checkHasArgs(line, "Where's the query?");
-            String query = String.join(" ", Arrays.copyOfRange(line, 1, line.length));
-            var matchingTasks = tasks.find(query);
+            var c = FindCommand.parse(line);
+            var matchingTasks = tasks.find(c.query());
 
             if (matchingTasks.isEmpty()) {
                 System.out.println("No matching tasks found.");
@@ -94,44 +80,37 @@ public class JankBot {
             }
         }
         case "delete" -> {
-            checkHasArgs(line, "Which task do you want to delete?");
-            int index = Integer.parseInt(line[1]) - 1;
-            printDelSuccessMsg(tasks.remove(index));
+            var c = DeleteCommand.parse(line);
+            printDelSuccessMsg(tasks.remove(c.index()));
             Storage.saveTasks(TASK_FILE, tasks);
         }
-        case "mark" -> {
-            checkHasArgs(line, "Which task do you want to mark?");
-            int index = Integer.parseInt(line[1]) - 1;
-            System.out.printf("Nice! I've marked this task as done:\n%s\n", tasks.mark(index));
-            Storage.saveTasks(TASK_FILE, tasks);
-        }
-        case "unmark" -> {
-            checkHasArgs(line, "Which task do you want to unmark?");
-            int index = Integer.parseInt(line[1]) - 1;
-            System.out.printf("Nice! I've marked this task as not done yet:\n%s\n", tasks.unmark(index));
+        case "mark", "unmark" -> {
+            var c = MarkCommand.parse(line);
+
+            if (c.isMarked()) {
+                System.out.printf("Nice! I've marked this task as done:\n%s\n", tasks.mark(c.index()));
+            } else {
+                System.out.printf("Nice! I've marked this task as not done yet:\n%s\n", tasks.unmark(c.index()));
+            }
+
             Storage.saveTasks(TASK_FILE, tasks);
         }
         case "todo" -> {
-            checkHasArgs(line, "Todo description cannot be empty");
-            var task = TodoTask.parse(Arrays.copyOfRange(line, 1, line.length));
-            printAddSuccessMsg(tasks.add(task));
+            var c = TodoCommand.parse(line);
+            printAddSuccessMsg(tasks.add(new TodoTask(c.desc())));
             Storage.saveTasks(TASK_FILE, tasks);
         }
         case "deadline" -> {
-            checkHasArgs(line, "Deadline description cannot be empty");
-            var task = DeadlineTask.parse(Arrays.copyOfRange(line, 1, line.length));
-            printAddSuccessMsg(tasks.add(task));
+            var c = DeadlineCommand.parse(line);
+            printAddSuccessMsg(tasks.add(new DeadlineTask(c.desc(), c.by())));
             Storage.saveTasks(TASK_FILE, tasks);
         }
         case "event" -> {
-            checkHasArgs(line, "Event description cannot be empty");
-            var task = EventTask.parse(Arrays.copyOfRange(line, 1, line.length));
-            printAddSuccessMsg(tasks.add(task));
+            var c = EventCommand.parse(line);
+            printAddSuccessMsg(tasks.add(new EventTask(c.desc(), c.from(), c.to())));
             Storage.saveTasks(TASK_FILE, tasks);
         }
-        default -> {
-            throw new JankBotException("I don't know what that means");
-        }
+        default -> throw new JankBotException("I don't know what that means");
         }
     }
 
