@@ -14,7 +14,9 @@ public class JankBot {
     private static final String name = "jank.JankBot";
     private static final TaskList tasks = Storage.loadTasks(TASK_FILE);
 
-
+    /**
+     * Prints greet message
+     */
     static void greet() {
         System.out.println("""
                      _   _    _   _ _  __
@@ -26,28 +28,54 @@ public class JankBot {
         System.out.printf("Hello! I'm %s\nWhat can I do for you?\n", name);
     }
 
+    /**
+     * Prints bye message
+     */
     static void bye() {
         System.out.println("Bye. Hope to see you again soon!");
     }
 
+    /**
+     * Prints delete successful message
+     *
+     * @param t task that was deleted
+     */
     static void printDelSuccessMsg(Task t) {
         System.out.println("Noted. I've removed this task:");
         System.out.println(t);
         System.out.printf("Now you have %d tasks in the list.\n", tasks.size());
     }
 
+    /**
+     * Prints the add successful message
+     *
+     * @param t task that was added
+     */
     static void printAddSuccessMsg(Task t) {
         System.out.println("Got it. I've added this task:");
         System.out.println(t);
         System.out.printf("Now you have %d tasks in the list.\n", tasks.size());
     }
 
+    /**
+     * Checks whether there is arguments in the cmd
+     *
+     * @param cmd command supplied
+     * @param msg error message if the command has no arguments
+     * @throws JankBotException
+     */
     static void checkHasArgs(String[] cmd, String msg) throws JankBotException {
         if (cmd.length <= 1) {
             throw new JankBotException(msg);
         }
     }
 
+    /**
+     * Performs the action that's supplied into the function
+     *
+     * @param line command as a String[]
+     * @throws JankBotException
+     */
     static void processCommand(String[] line) throws JankBotException {
         String cmd = line[0];
 
