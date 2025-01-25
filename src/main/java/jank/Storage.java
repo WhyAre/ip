@@ -12,6 +12,12 @@ import java.io.ObjectOutputStream;
  * Handles the loading and storing of the tasks to secondary storage
  */
 public class Storage {
+    /**
+     * Stores the tasks into a file
+     *
+     * @param filepath relative path to the source file
+     * @return List of tasks as a TaskList object
+     */
     static TaskList loadTasks(String filepath) {
         try (var fin = new FileInputStream(filepath); var ois = new ObjectInputStream(fin)) {
             if (ois.readObject() instanceof TaskList tasklist) {
@@ -25,6 +31,13 @@ public class Storage {
         }
     }
 
+    /**
+     * Saves tasks into a file
+     *
+     * @param filepath path to the destination file
+     * @param tasks    List of tasks (as a TaskList object) to save
+     * @throws JankBotException
+     */
     static void saveTasks(String filepath, TaskList tasks) throws JankBotException {
         var file = new File(filepath);
         file.getParentFile().mkdirs(); // Will create parent directories if not exists

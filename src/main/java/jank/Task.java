@@ -32,6 +32,11 @@ public abstract class Task implements Serializable {
         return title.contains(query);
     }
 
+    /**
+     * Marks/Unmarks task
+     *
+     * @param isMarked whether or not to mark the task
+     */
     void setMark(boolean isMarked) {
         this.isMarked = isMarked;
     }
