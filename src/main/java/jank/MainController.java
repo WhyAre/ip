@@ -31,7 +31,7 @@ public class MainController implements Initializable {
             return;
         }
 
-        outputbox.appendText(inputbox.getText() + "\n");
+        outputbox.appendText("> %s\n".formatted(inputbox.getText()));
 
         try {
             var out = JankBot.executeCommand(inputbox.getText().split(" "));
@@ -40,7 +40,7 @@ public class MainController implements Initializable {
             outputbox.appendText(e.getMessage() + "\n");
         }
 
-        inputbox.setText("");
+        inputbox.clear();
     }
 
     @Override
