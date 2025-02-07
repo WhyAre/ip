@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/17.0.12" fx:controller="jank.MainController">
+    <children>
+        <TextField fx:id="inputbox" layoutX="159.0" layoutY="328.0" onKeyPressed="#inputOnKeyPressed" prefWidth="600.0"
+                   AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
+    </children>
+</AnchorPane>
