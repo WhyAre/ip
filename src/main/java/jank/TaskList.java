@@ -53,16 +53,14 @@ public class TaskList implements Serializable {
                     .toList();
     }
 
-    void print() {
+    String getAllTasks() {
         if (tasks.isEmpty()) {
-            System.out.println("There are no tasks");
-            return;
+            return "There are no tasks";
         }
-        String out = IntStream.iterate(1, x -> x + 1)
-                              .limit(tasks.size())
-                              .mapToObj(i -> "%d. %s".formatted(i, tasks.get(i - 1)))
-                              .collect(Collectors.joining("\n"));
-        System.out.println(out);
+        return IntStream.iterate(1, x -> x + 1)
+                        .limit(tasks.size())
+                        .mapToObj(i -> "%d. %s".formatted(i, tasks.get(i - 1)))
+                        .collect(Collectors.joining("\n"));
     }
 
     int size() {
