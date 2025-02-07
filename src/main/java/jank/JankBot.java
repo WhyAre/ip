@@ -68,7 +68,7 @@ public class JankBot {
      * @param line command as a String[]
      * @throws JankBotException
      */
-    static String processCommand(String[] line) throws JankBotException {
+    static String executeCommand(String[] line) throws JankBotException {
         String cmd = line[0];
 
         return switch (cmd) {

@@ -26,7 +26,7 @@ public class MainController implements Initializable {
         outputbox.appendText(inputbox.getText() + "\n");
 
         try {
-            var out = JankBot.processCommand(inputbox.getText().split(" "));
+            var out = JankBot.executeCommand(inputbox.getText().split(" "));
             outputbox.appendText(out + "\n");
         } catch (JankBotException e) {
             outputbox.appendText(e.getMessage() + "\n");
