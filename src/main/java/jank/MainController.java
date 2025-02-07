@@ -10,6 +10,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+/**
+ * Controls the main logic of the user interface
+ */
 public class MainController implements Initializable {
     @FXML
     private TextField inputbox;
@@ -17,6 +20,11 @@ public class MainController implements Initializable {
     @FXML
     private TextArea outputbox;
 
+    /**
+     * Handles user commands when the user presses the enter key
+     *
+     * @param ke KeyEvent
+     */
     @FXML
     public void inputOnKeyPressed(KeyEvent ke) {
         if (!ke.getCode().equals(KeyCode.ENTER)) {

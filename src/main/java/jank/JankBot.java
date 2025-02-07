@@ -21,7 +21,6 @@ public class JankBot {
                  _  | |/ _ \\ |  \\| | ' /
                 | |_| / ___ \\| |\\  | . \\
                  \\___/_/   \\_\\_| \\_|_|\\_\\
-                
                 Hello! I'm %s
                 What can I do for you?
                 """.formatted(name);
