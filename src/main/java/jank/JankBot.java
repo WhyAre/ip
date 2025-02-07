@@ -16,15 +16,17 @@ public class JankBot {
     /**
      * Prints greet message
      */
-    static void greet() {
-        System.out.println("""
+    static String greet() {
+        return """
                      _   _    _   _ _  __
                     | | / \\  | \\ | | |/ /
                  _  | |/ _ \\ |  \\| | ' /
                 | |_| / ___ \\| |\\  | . \\
                  \\___/_/   \\_\\_| \\_|_|\\_\\
-                """);
-        System.out.printf("Hello! I'm %s\nWhat can I do for you?\n", name);
+                
+                Hello! I'm %s
+                What can I do for you?
+                """.formatted(name);
     }
 
     /**

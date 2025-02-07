@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -12,6 +13,9 @@ import javafx.scene.input.KeyEvent;
 public class MainController implements Initializable {
     @FXML
     private TextField inputbox;
+
+    @FXML
+    private TextArea outputbox;
 
     @FXML
     public void inputOnKeyPressed(KeyEvent ke) {
@@ -29,6 +33,6 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        outputbox.setText(JankBot.greet());
     }
 }
