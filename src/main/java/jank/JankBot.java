@@ -1,8 +1,6 @@
 package jank;
 
-import java.util.Scanner;
-import java.util.stream.Stream;
-
+import java.util.stream.Collectors;
 
 /**
  * Main Bot
@@ -41,10 +39,11 @@ public class JankBot {
      *
      * @param t task that was deleted
      */
-    static void printDelSuccessMsg(Task t) {
-        System.out.println("Noted. I've removed this task:");
-        System.out.println(t);
-        System.out.printf("Now you have %d tasks in the list.\n", tasks.size());
+    static String getDelSuccessMsg(Task t) {
+        return """
+                Noted. I've removed this task:
+                %s
+                Now you have %d tasks in the list.""".formatted(t, tasks.size());
     }
 
     /**
@@ -52,10 +51,14 @@ public class JankBot {
      *
      * @param t task that was added
      */
-    static void printAddSuccessMsg(Task t) {
-        System.out.println("Got it. I've added this task:");
-        System.out.println(t);
-        System.out.printf("Now you have %d tasks in the list.\n", tasks.size());
+    static String getAddSuccessMsg(Task t) {
+        return """
+                Got it. I've added this task:
+                %s
+                Now you have %d tasks in the list.""".formatted(t, tasks.size());
+//        System.out.println("Got it. I've added this task:");
+//        System.out.println(t);
+//        System.out.printf("Now you have %d tasks in the list.\n", tasks.size());
     }
 
 
@@ -65,78 +68,61 @@ public class JankBot {
      * @param line command as a String[]
      * @throws JankBotException
      */
-    static void processCommand(String[] line) throws JankBotException {
+    static String processCommand(String[] line) throws JankBotException {
         String cmd = line[0];
 
-        switch (cmd) {
-        case "list" -> tasks.print();
-        case "find" -> {
-            var c = FindCommand.parse(line);
-            var matchingTasks = tasks.find(c.query());
+        return switch (cmd) {
+            case "list" -> tasks.getAllTasks();
+            case "find" -> {
+                var c = FindCommand.parse(line);
+                var matchingTasks = tasks.find(c.query());
 
-            if (matchingTasks.isEmpty()) {
-                System.out.println("No matching tasks found.");
-            } else {
-                System.out.println("Here are the matching tasks in your list:");
-                matchingTasks.forEach(System.out::println);
+                if (matchingTasks.isEmpty()) {
+                    yield "No matching tasks found.";
+                } else {
+                    var tasks = matchingTasks.stream()
+                                             .map(Task::toString)
+                                             .collect(Collectors.joining("\n"));
+                    yield "Here are the matching tasks in your list:\n%s".formatted(tasks);
+                }
             }
-        }
-        case "delete" -> {
-            var c = DeleteCommand.parse(line);
-            printDelSuccessMsg(tasks.remove(c.index()));
-            Storage.saveTasks(TASK_FILE, tasks);
-        }
-        case "mark", "unmark" -> {
-            var c = MarkCommand.parse(line);
-
-            if (c.isMarked()) {
-                System.out.printf("Nice! I've marked this task as done:\n%s\n", tasks.mark(c.index()));
-            } else {
-                System.out.printf("Nice! I've marked this task as not done yet:\n%s\n", tasks.unmark(c.index()));
+            case "delete" -> {
+                var c = DeleteCommand.parse(line);
+                var deletedTask = tasks.remove(c.index());
+                Storage.saveTasks(TASK_FILE, tasks);
+                yield getDelSuccessMsg(deletedTask);
             }
+            case "mark", "unmark" -> {
+                var c = MarkCommand.parse(line);
 
-            Storage.saveTasks(TASK_FILE, tasks);
-        }
-        case "todo" -> {
-            var c = TodoCommand.parse(line);
-            printAddSuccessMsg(tasks.add(new TodoTask(c.desc())));
-            Storage.saveTasks(TASK_FILE, tasks);
-        }
-        case "deadline" -> {
-            var c = DeadlineCommand.parse(line);
-            printAddSuccessMsg(tasks.add(new DeadlineTask(c.desc(), c.by())));
-            Storage.saveTasks(TASK_FILE, tasks);
-        }
-        case "event" -> {
-            var c = EventCommand.parse(line);
-            printAddSuccessMsg(tasks.add(new EventTask(c.desc(), c.from(), c.to())));
-            Storage.saveTasks(TASK_FILE, tasks);
-        }
-        default -> throw new JankBotException("I don't know what that means");
-        }
+                var output = (c.isMarked())
+                        ? "Nice! I've marked this task as done:\n%s\n".formatted(tasks.mark(c.index()))
+                        : "Nice! I've marked this task as not done yet:\n%s\n".formatted(tasks.unmark(c.index()));
+
+                Storage.saveTasks(TASK_FILE, tasks);
+
+                yield output;
+            }
+            case "todo" -> {
+                var c = TodoCommand.parse(line);
+                var newTask = tasks.add(new TodoTask(c.desc()));
+                Storage.saveTasks(TASK_FILE, tasks);
+                yield getAddSuccessMsg(newTask);
+            }
+            case "deadline" -> {
+                var c = DeadlineCommand.parse(line);
+                var newTask = tasks.add(new DeadlineTask(c.desc(), c.by()));
+                Storage.saveTasks(TASK_FILE, tasks);
+                yield getAddSuccessMsg(newTask);
+            }
+            case "event" -> {
+                var c = EventCommand.parse(line);
+                var newTask = tasks.add(new EventTask(c.desc(), c.from(), c.to()));
+                Storage.saveTasks(TASK_FILE, tasks);
+                yield getAddSuccessMsg(newTask);
+            }
+            default -> throw new JankBotException("I don't know what that means");
+        };
     }
-
-    public static void main(String[] args) {
-        greet();
-
-        var sc = new Scanner(System.in);
-
-        Stream.generate(sc::nextLine)
-              .map(String::strip)
-              .takeWhile(input -> !input.equalsIgnoreCase("bye"))
-              .map(line -> line.split(" "))
-              .forEach(cmd -> {
-                  try {
-                      JankBot.processCommand(cmd);
-                  } catch (JankBotException e) {
-                      System.out.println(e.getMessage());
-                  }
-              });
-
-        sc.close();
-
-        bye();
-    }
-
 }
 
