@@ -1,4 +1,4 @@
-package jank;
+package jank.ui;
 
 import java.io.IOException;
 

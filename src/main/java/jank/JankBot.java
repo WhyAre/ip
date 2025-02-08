@@ -55,7 +55,7 @@ public class JankBot {
     /**
      * Prints greet message
      */
-    String greet() {
+    public String greet() {
         return """
                      _   _    _   _ _  __
                     | | / \\  | \\ | | |/ /
@@ -73,7 +73,7 @@ public class JankBot {
      * @param line command as a String[]
      * @throws JankBotException
      */
-    String executeCommand(String[] line) throws JankBotException {
+    public String executeCommand(String[] line) throws JankBotException {
         String cmd = line[0];
 
         return switch (cmd) {
