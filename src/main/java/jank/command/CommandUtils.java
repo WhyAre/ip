@@ -1,4 +1,4 @@
-package jank;
+package jank.command;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,12 +9,27 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import jank.JankBotException;
+
 /**
- * Helper functions for tasks
+ * Handles the parsing of user input
  */
-public class TaskImpl {
+public class CommandUtils {
     /**
-     * Separate parts of the input string by flags
+     * Checks whether there is arguments in the cmd
+     *
+     * @param cmd command supplied
+     * @param msg error message if the command has no arguments
+     * @throws JankBotException
+     */
+    static void checkHasArgs(String[] cmd, String msg) throws JankBotException {
+        if (cmd.length <= 1) {
+            throw new JankBotException(msg);
+        }
+    }
+
+    /**
+     * Separates parts of the input string by flags
      *
      * @param line  Input line
      * @param flags array of mandatory flags
@@ -67,8 +82,4 @@ public class TaskImpl {
         }
     }
 
-    static String formatDate(LocalDateTime dateTime) {
-        var formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mma");
-        return dateTime.format(formatter);
-    }
 }

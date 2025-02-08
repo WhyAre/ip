@@ -1,8 +1,10 @@
-package jank;
+package jank.ui;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import jank.JankBot;
+import jank.JankBotException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
@@ -15,11 +17,18 @@ import javafx.stage.Stage;
  * Controls the main logic of the user interface
  */
 public class MainController implements Initializable {
+    private static final String TASK_FILE = "./data/jank.txt";
+    private final JankBot bot;
+
     @FXML
     private TextField inputbox;
 
     @FXML
     private TextArea outputbox;
+
+    public MainController() {
+        bot = new JankBot(TASK_FILE);
+    }
 
     /**
      * Handles user commands when the user presses the enter key
@@ -42,7 +51,7 @@ public class MainController implements Initializable {
         }
 
         try {
-            var out = JankBot.executeCommand(cmd);
+            var out = bot.executeCommand(cmd);
             outputbox.appendText(out + "\n");
         } catch (JankBotException e) {
             outputbox.appendText(e.getMessage() + "\n");
@@ -53,6 +62,6 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        outputbox.setText(JankBot.greet());
+        outputbox.setText(bot.greet());
     }
 }

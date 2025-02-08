@@ -2,28 +2,35 @@ package jank;
 
 import java.util.stream.Collectors;
 
+import jank.command.DeadlineCommand;
+import jank.command.DeleteCommand;
+import jank.command.EventCommand;
+import jank.command.FindCommand;
+import jank.command.MarkCommand;
+import jank.command.TodoCommand;
+import jank.task.DeadlineTask;
+import jank.task.EventTask;
+import jank.task.Task;
+import jank.task.TaskList;
+import jank.task.TodoTask;
+
 /**
  * Main Bot
  */
 public class JankBot {
-    private static final String TASK_FILE = "./data/jank.txt";
+    private static final String NAME = "JankBot";
 
-    private static final String name = "JankBot";
-    private static final TaskList tasks = Storage.loadTasks(TASK_FILE);
+    private final TaskList tasks;
+    private final String taskFile;
 
     /**
-     * Prints greet message
+     * Constructs a new JankBot object
+     *
+     * @param taskFile file path to store tasks
      */
-    static String greet() {
-        return """
-                     _   _    _   _ _  __
-                    | | / \\  | \\ | | |/ /
-                 _  | |/ _ \\ |  \\| | ' /
-                | |_| / ___ \\| |\\  | . \\
-                 \\___/_/   \\_\\_| \\_|_|\\_\\
-                Hello! I'm %s
-                What can I do for you?
-                """.formatted(name);
+    public JankBot(String taskFile) {
+        this.taskFile = taskFile;
+        tasks = Storage.loadTasks(taskFile);
     }
 
     /**
@@ -38,7 +45,7 @@ public class JankBot {
      *
      * @param t task that was deleted
      */
-    static String getDelSuccessMsg(Task t) {
+    String getDelSuccessMsg(Task t) {
         return """
                 Noted. I've removed this task:
                 %s
@@ -50,16 +57,40 @@ public class JankBot {
      *
      * @param t task that was added
      */
-    static String getAddSuccessMsg(Task t) {
+    String getAddSuccessMsg(Task t) {
         return """
                 Got it. I've added this task:
                 %s
                 Now you have %d tasks in the list.""".formatted(t, tasks.size());
-//        System.out.println("Got it. I've added this task:");
-//        System.out.println(t);
-//        System.out.printf("Now you have %d tasks in the list.\n", tasks.size());
     }
 
+    /**
+     * Prints greet message
+     */
+    public String greet() {
+        return """
+                     _   _    _   _ _  __
+                    | | / \\  | \\ | | |/ /
+                 _  | |/ _ \\ |  \\| | ' /
+                | |_| / ___ \\| |\\  | . \\
+                 \\___/_/   \\_\\_| \\_|_|\\_\\
+                Hello! I'm %s
+                What can I do for you?
+                """.formatted(NAME);
+    }
+
+    /**
+     * Returns true if min <= index < max
+     *
+     * @param index index to check
+     * @param min   min value (inclusive)
+     * @param max   max value (exclusive)
+     */
+    void checkIndexInRange(int index, int min, int max) throws JankBotException {
+        if (index < min || index >= max) {
+            throw new JankBotException("Invalid index");
+        }
+    }
 
     /**
      * Performs the action that's supplied into the function
@@ -67,7 +98,7 @@ public class JankBot {
      * @param line command as a String[]
      * @throws JankBotException
      */
-    static String executeCommand(String[] line) throws JankBotException {
+    public String executeCommand(String[] line) throws JankBotException {
         String cmd = line[0];
 
         return switch (cmd) {
@@ -87,37 +118,39 @@ public class JankBot {
             }
             case "delete" -> {
                 var c = DeleteCommand.parse(line);
+                checkIndexInRange(c.index(), 0, tasks.size());
                 var deletedTask = tasks.remove(c.index());
-                Storage.saveTasks(TASK_FILE, tasks);
+                Storage.saveTasks(taskFile, tasks);
                 yield getDelSuccessMsg(deletedTask);
             }
             case "mark", "unmark" -> {
                 var c = MarkCommand.parse(line);
+                checkIndexInRange(c.index(), 0, tasks.size());
 
                 var output = (c.isMarked())
                         ? "Nice! I've marked this task as done:\n%s\n".formatted(tasks.mark(c.index()))
                         : "Nice! I've marked this task as not done yet:\n%s\n".formatted(tasks.unmark(c.index()));
 
-                Storage.saveTasks(TASK_FILE, tasks);
+                Storage.saveTasks(taskFile, tasks);
 
                 yield output;
             }
             case "todo" -> {
                 var c = TodoCommand.parse(line);
                 var newTask = tasks.add(new TodoTask(c.desc()));
-                Storage.saveTasks(TASK_FILE, tasks);
+                Storage.saveTasks(taskFile, tasks);
                 yield getAddSuccessMsg(newTask);
             }
             case "deadline" -> {
                 var c = DeadlineCommand.parse(line);
                 var newTask = tasks.add(new DeadlineTask(c.desc(), c.by()));
-                Storage.saveTasks(TASK_FILE, tasks);
+                Storage.saveTasks(taskFile, tasks);
                 yield getAddSuccessMsg(newTask);
             }
             case "event" -> {
                 var c = EventCommand.parse(line);
                 var newTask = tasks.add(new EventTask(c.desc(), c.from(), c.to()));
-                Storage.saveTasks(TASK_FILE, tasks);
+                Storage.saveTasks(taskFile, tasks);
                 yield getAddSuccessMsg(newTask);
             }
             default -> throw new JankBotException("I don't know what that means");
