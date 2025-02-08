@@ -1,4 +1,4 @@
-package jank;
+package jank.task;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 public class TaskList implements Serializable {
     private final List<Task> tasks;
 
-    TaskList() {
+    public TaskList() {
         this(new ArrayList<>());
     }
 
@@ -20,22 +20,22 @@ public class TaskList implements Serializable {
         this.tasks = tasks;
     }
 
-    Task add(Task task) {
+    public Task add(Task task) {
         tasks.add(task);
         return task;
     }
 
-    Task remove(int index) {
+    public Task remove(int index) {
         return tasks.remove(index);
     }
 
-    Task mark(int index) {
+    public Task mark(int index) {
         var task = tasks.get(index);
         task.setMark(true);
         return task;
     }
 
-    Task unmark(int index) {
+    public Task unmark(int index) {
         var task = tasks.get(index);
         task.setMark(false);
         return task;
@@ -47,13 +47,13 @@ public class TaskList implements Serializable {
      * @param query Query string
      * @return list of tasks
      */
-    List<Task> find(String query) {
+    public List<Task> find(String query) {
         return tasks.stream()
                     .filter(task -> task.contains(query))
                     .toList();
     }
 
-    String getAllTasks() {
+    public String getAllTasks() {
         if (tasks.isEmpty()) {
             return "There are no tasks";
         }
@@ -63,7 +63,7 @@ public class TaskList implements Serializable {
                         .collect(Collectors.joining("\n"));
     }
 
-    int size() {
+    public int size() {
         return tasks.size();
     }
 }

@@ -8,6 +8,11 @@ import jank.command.EventCommand;
 import jank.command.FindCommand;
 import jank.command.MarkCommand;
 import jank.command.TodoCommand;
+import jank.task.DeadlineTask;
+import jank.task.EventTask;
+import jank.task.Task;
+import jank.task.TaskList;
+import jank.task.TodoTask;
 
 /**
  * Main Bot

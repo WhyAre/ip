@@ -1,4 +1,4 @@
-package jank;
+package jank.task;
 
 import java.io.Serializable;
 

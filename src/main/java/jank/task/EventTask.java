@@ -1,4 +1,4 @@
-package jank;
+package jank.task;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +9,7 @@ public class EventTask extends Task {
     private final LocalDateTime from;
     private final LocalDateTime to;
 
-    EventTask(String title, LocalDateTime from, LocalDateTime to) {
+    public EventTask(String title, LocalDateTime from, LocalDateTime to) {
         super(title);
         this.from = from;
         this.to = to;
@@ -18,8 +18,8 @@ public class EventTask extends Task {
 
     @Override
     public String toString() {
-        return "[E]%s (from: %s to: %s)".formatted(super.toString(), TaskImpl.formatDate(from),
-                TaskImpl.formatDate(to));
+        return "[E]%s (from: %s to: %s)".formatted(super.toString(), TaskUtil.formatDate(from),
+                TaskUtil.formatDate(to));
     }
 
 

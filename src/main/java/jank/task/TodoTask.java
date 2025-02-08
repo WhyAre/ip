@@ -1,10 +1,10 @@
-package jank;
+package jank.task;
 
 /**
  * Task with only a title
  */
 public class TodoTask extends Task {
-    TodoTask(String title) {
+    public TodoTask(String title) {
         super(title);
     }
 

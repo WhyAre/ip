@@ -1,4 +1,4 @@
-package jank;
+package jank.task;
 
 import java.time.LocalDateTime;
 
@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 public class DeadlineTask extends Task {
     private LocalDateTime deadline;
 
-    DeadlineTask(String title, LocalDateTime deadline) {
+    public DeadlineTask(String title, LocalDateTime deadline) {
         super(title);
         this.deadline = deadline;
     }
 
     @Override
     public String toString() {
-        return "[D]%s (by: %s)".formatted(super.toString(), TaskImpl.formatDate(deadline));
+        return "[D]%s (by: %s)".formatted(super.toString(), TaskUtil.formatDate(deadline));
     }
 }

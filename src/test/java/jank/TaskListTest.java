@@ -8,6 +8,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import jank.task.TaskList;
+import jank.task.TodoTask;
+
 
 public class TaskListTest {
     @Test
