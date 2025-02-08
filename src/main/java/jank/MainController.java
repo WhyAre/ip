@@ -9,6 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 
 /**
  * Controls the main logic of the user interface
@@ -33,8 +34,15 @@ public class MainController implements Initializable {
 
         outputbox.appendText("> %s\n".formatted(inputbox.getText()));
 
+        var cmd = inputbox.getText().split(" ");
+
+        if (cmd[0].equalsIgnoreCase("bye")) {
+            Stage stage = (Stage) inputbox.getScene().getWindow();
+            stage.close();
+        }
+
         try {
-            var out = JankBot.executeCommand(inputbox.getText().split(" "));
+            var out = JankBot.executeCommand(cmd);
             outputbox.appendText(out + "\n");
         } catch (JankBotException e) {
             outputbox.appendText(e.getMessage() + "\n");
