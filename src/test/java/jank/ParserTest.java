@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import jank.command.DeadlineCommand;
+import jank.command.EventCommand;
+
 public class ParserTest {
     @Test
     public void testDeadlineCommand() {

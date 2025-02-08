@@ -2,6 +2,13 @@ package jank;
 
 import java.util.stream.Collectors;
 
+import jank.command.DeadlineCommand;
+import jank.command.DeleteCommand;
+import jank.command.EventCommand;
+import jank.command.FindCommand;
+import jank.command.MarkCommand;
+import jank.command.TodoCommand;
+
 /**
  * Main Bot
  */
