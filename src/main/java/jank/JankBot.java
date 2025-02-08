@@ -33,7 +33,7 @@ public class JankBot {
      *
      * @param t task that was deleted
      */
-    static String getDelSuccessMsg(Task t) {
+    String getDelSuccessMsg(Task t) {
         return """
                 Noted. I've removed this task:
                 %s
@@ -45,7 +45,7 @@ public class JankBot {
      *
      * @param t task that was added
      */
-    static String getAddSuccessMsg(Task t) {
+    String getAddSuccessMsg(Task t) {
         return """
                 Got it. I've added this task:
                 %s
