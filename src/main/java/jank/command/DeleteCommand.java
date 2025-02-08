@@ -8,6 +8,13 @@ import jank.JankBotException;
  * @param index index to delete
  */
 public record DeleteCommand(int index) implements Command {
+    /**
+     * Parses input into DeleteCommand
+     *
+     * @param line input
+     * @return DeleteCommand
+     * @throws JankBotException
+     */
     public static DeleteCommand parse(String[] line) throws JankBotException {
         CommandUtils.checkHasArgs(line, "Usage: delete <index>");
         int index;

@@ -20,21 +20,45 @@ public class TaskList implements Serializable {
         this.tasks = tasks;
     }
 
+    /**
+     * Adds task to tasklist
+     *
+     * @param task task to add
+     * @return newly added task
+     */
     public Task add(Task task) {
         tasks.add(task);
         return task;
     }
 
+    /**
+     * Removes task at index
+     *
+     * @param index index to remove
+     * @return task that was just deleted
+     */
     public Task remove(int index) {
         return tasks.remove(index);
     }
 
+    /**
+     * Marks task at specified index
+     *
+     * @param index index to mark
+     * @return task that was marked
+     */
     public Task mark(int index) {
         var task = tasks.get(index);
         task.setMark(true);
         return task;
     }
 
+    /**
+     * Unmarks a task at index
+     *
+     * @param index index to unmark
+     * @return task that was unmarked
+     */
     public Task unmark(int index) {
         var task = tasks.get(index);
         task.setMark(false);

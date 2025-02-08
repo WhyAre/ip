@@ -12,6 +12,13 @@ import jank.JankBotException;
  * @param desc description
  */
 public record TodoCommand(String desc) implements Command {
+    /**
+     * Parses input line into TodoCommand
+     *
+     * @param line input
+     * @return TodoCommand
+     * @throws JankBotException
+     */
     public static TodoCommand parse(String[] line) throws JankBotException {
         CommandUtils.checkHasArgs(line, "Usage: todo <desc>");
 

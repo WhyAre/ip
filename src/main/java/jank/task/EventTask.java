@@ -9,8 +9,15 @@ public class EventTask extends Task {
     private final LocalDateTime from;
     private final LocalDateTime to;
 
-    public EventTask(String title, LocalDateTime from, LocalDateTime to) {
-        super(title);
+    /**
+     * Constructs new EventTask
+     *
+     * @param desc description
+     * @param from start date and time of event
+     * @param to   end date and time of event
+     */
+    public EventTask(String desc, LocalDateTime from, LocalDateTime to) {
+        super(desc);
         this.from = from;
         this.to = to;
     }

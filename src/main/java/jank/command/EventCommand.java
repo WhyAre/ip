@@ -13,6 +13,13 @@ import jank.JankBotException;
  * @param to   end date and time of event
  */
 public record EventCommand(String desc, LocalDateTime from, LocalDateTime to) implements Command {
+    /**
+     * Parses input into EventCommand
+     *
+     * @param line input line
+     * @return EventCommand
+     * @throws JankBotException
+     */
     public static EventCommand parse(String[] line) throws JankBotException {
         CommandUtils.checkHasArgs(line, "Usage: event <desc> /from <date> /to <date>");
 
