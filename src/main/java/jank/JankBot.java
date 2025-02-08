@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
  */
 public class JankBot {
     private static final String TASK_FILE = "./data/jank.txt";
+    private static final String NAME = "JankBot";
 
-    private static final String name = "JankBot";
     private static final TaskList tasks = Storage.loadTasks(TASK_FILE);
 
     /**
@@ -23,7 +23,7 @@ public class JankBot {
                  \\___/_/   \\_\\_| \\_|_|\\_\\
                 Hello! I'm %s
                 What can I do for you?
-                """.formatted(name);
+                """.formatted(NAME);
     }
 
     /**
