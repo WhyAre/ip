@@ -50,9 +50,6 @@ public class JankBot {
                 Got it. I've added this task:
                 %s
                 Now you have %d tasks in the list.""".formatted(t, tasks.size());
-//        System.out.println("Got it. I've added this task:");
-//        System.out.println(t);
-//        System.out.printf("Now you have %d tasks in the list.\n", tasks.size());
     }
 
     /**
