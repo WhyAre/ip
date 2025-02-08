@@ -80,6 +80,19 @@ public class JankBot {
     }
 
     /**
+     * Returns true if min <= index < max
+     *
+     * @param index index to check
+     * @param min   min value (inclusive)
+     * @param max   max value (exclusive)
+     */
+    void checkIndexInRange(int index, int min, int max) throws JankBotException {
+        if (index < min || index >= max) {
+            throw new JankBotException("Invalid index");
+        }
+    }
+
+    /**
      * Performs the action that's supplied into the function
      *
      * @param line command as a String[]
@@ -105,12 +118,14 @@ public class JankBot {
             }
             case "delete" -> {
                 var c = DeleteCommand.parse(line);
+                checkIndexInRange(c.index(), 0, tasks.size());
                 var deletedTask = tasks.remove(c.index());
                 Storage.saveTasks(taskFile, tasks);
                 yield getDelSuccessMsg(deletedTask);
             }
             case "mark", "unmark" -> {
                 var c = MarkCommand.parse(line);
+                checkIndexInRange(c.index(), 0, tasks.size());
 
                 var output = (c.isMarked())
                         ? "Nice! I've marked this task as done:\n%s\n".formatted(tasks.mark(c.index()))
