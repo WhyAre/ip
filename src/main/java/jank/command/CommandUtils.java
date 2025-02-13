@@ -42,6 +42,8 @@ public class CommandUtils {
                                 HashMap<String, StringBuffer>::new));
         map.put("", new StringBuffer());
 
+        assert map.keySet().size() == flags.length + 1 : "Number of keys in map doesn't tally";
+
         var curKey = "";
         for (var word : line) {
             if (map.containsKey(word)) {
@@ -61,6 +63,8 @@ public class CommandUtils {
         if (!missingFlags.isEmpty()) {
             throw new JankBotException("Missing flags: %s".formatted(missingFlags));
         }
+
+        assert mapping.keySet().size() == flags.length + 1 : "Number of keys in map doesn't tally";
 
         return mapping;
     }
