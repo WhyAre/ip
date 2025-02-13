@@ -14,7 +14,7 @@ import jank.JankBotException;
 /**
  * Handles the parsing of user input
  */
-public class CommandUtils {
+class CommandUtils {
     /**
      * Checks whether there is arguments in the cmd
      *
