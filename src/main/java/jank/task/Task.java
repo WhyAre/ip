@@ -1,20 +1,27 @@
 package jank.task;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * Task superclass
  */
-public class Task implements Serializable {
+public class Task implements Serializable, Comparable<Task> {
     private final String title;
     private boolean isMarked;
+    private LocalDateTime datetime;
 
     Task(String title) {
-        this(title, false);
+        this(title, null, false);
     }
 
-    Task(String title, boolean isMarked) {
+    Task(String title, LocalDateTime datetime) {
+        this(title, datetime, false);
+    }
+
+    Task(String title, LocalDateTime datetime, boolean isMarked) {
         this.title = title;
+        this.datetime = datetime;
         this.isMarked = isMarked;
     }
 
@@ -39,6 +46,18 @@ public class Task implements Serializable {
 
     private char getStatusIcon() {
         return (this.isMarked ? 'X' : ' ');
+    }
+
+    @Override
+    public int compareTo(Task task) {
+        if (this.datetime == null) {
+            return -1;
+        }
+        if (task.datetime == null) {
+            return 1;
+        }
+
+        return this.datetime.compareTo(task.datetime);
     }
 
     @Override
