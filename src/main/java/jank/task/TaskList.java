@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Class that wraps a list of tasks
@@ -84,22 +82,29 @@ public class TaskList implements Serializable {
      * @param end maximum date of deadline
      * @return list of deadlines that's within the interval
      */
-    public List<DeadlineTask> remind(LocalDateTime end) {
+    public List<Task> remind(LocalDateTime end) {
         return tasks.stream()
                     .filter(DeadlineTask.class::isInstance)
                     .map(DeadlineTask.class::cast)
                     .filter(task -> task.isBeforeOrEqual(end))
+                    .map(Task.class::cast)
                     .toList();
+    }
+
+    /**
+     * Sorts the tasks based on date
+     *
+     * @return tasks in sorted order
+     */
+    public List<Task> sorted() {
+        return tasks.stream().sorted().toList();
     }
 
     public String getAllTasks() {
         if (tasks.isEmpty()) {
             return "There are no tasks";
         }
-        return IntStream.iterate(1, x -> x + 1)
-                        .limit(tasks.size())
-                        .mapToObj(i -> "%d. %s".formatted(i, tasks.get(i - 1)))
-                        .collect(Collectors.joining("\n"));
+        return TaskUtil.tasksToPrintableFormat(tasks);
     }
 
     public int size() {

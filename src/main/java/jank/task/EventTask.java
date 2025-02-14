@@ -17,7 +17,7 @@ public class EventTask extends Task {
      * @param to   end date and time of event
      */
     public EventTask(String desc, LocalDateTime from, LocalDateTime to) {
-        super(desc);
+        super(desc, to);
         this.from = from;
         this.to = to;
     }

@@ -1,7 +1,5 @@
 package jank;
 
-import java.util.stream.Collectors;
-
 import jank.command.DeadlineCommand;
 import jank.command.DeleteCommand;
 import jank.command.EventCommand;
@@ -13,6 +11,7 @@ import jank.task.DeadlineTask;
 import jank.task.EventTask;
 import jank.task.Task;
 import jank.task.TaskList;
+import jank.task.TaskUtil;
 import jank.task.TodoTask;
 
 /**
@@ -111,9 +110,7 @@ public class JankBot {
                 if (matchingTasks.isEmpty()) {
                     yield "No matching tasks found.";
                 } else {
-                    var tasks = matchingTasks.stream()
-                                             .map(Task::toString)
-                                             .collect(Collectors.joining("\n"));
+                    var tasks = TaskUtil.tasksToPrintableFormat(matchingTasks);
                     yield "Here are the matching tasks in your list:\n%s".formatted(tasks);
                 }
             }
@@ -124,11 +121,17 @@ public class JankBot {
 
                 if (matchingTasks.isEmpty()) {
                     yield "You have no deadlines";
-                } else {
-                    yield matchingTasks.stream()
-                                       .map(Task::toString)
-                                       .collect(Collectors.joining("\n"));
                 }
+                yield TaskUtil.tasksToPrintableFormat(matchingTasks);
+
+            }
+            case "sort" -> {
+                var sortedTasks = tasks.sorted();
+
+                if (sortedTasks.isEmpty()) {
+                    yield "There are no tasks";
+                }
+                yield TaskUtil.tasksToPrintableFormat(sortedTasks);
 
             }
             case "delete" -> {
