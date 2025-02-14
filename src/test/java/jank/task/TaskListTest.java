@@ -61,8 +61,9 @@ public class TaskListTest {
         var taskList = new TaskList(tasks);
 
         taskList.remind(date.plusHours(1)).forEach(task -> {
-            assertInstanceOf(DeadlineTask.class, task);
-            assertTrue(task.isBeforeOrEqual(date.plusHours(1)));
+            var deadlineTask = assertInstanceOf(DeadlineTask.class, task);
+
+            assertTrue(deadlineTask.isBeforeOrEqual(date.plusHours(1)));
         });
     }
 }
