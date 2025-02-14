@@ -66,4 +66,22 @@ public class TaskListTest {
             assertTrue(deadlineTask.isBeforeOrEqual(date.plusHours(1)));
         });
     }
+
+    @Test
+    public void sorted() {
+        var date = LocalDateTime.of(2025, 2, 14, 10, 0, 0);
+        var tasks = new ArrayList<Task>();
+        tasks.add(new DeadlineTask("deadline1", date));
+        tasks.add(new DeadlineTask("deadline2", date.plusHours(1)));
+        tasks.add(new TodoTask("todo1"));
+        tasks.add(new EventTask("event1", date, date.plusHours(1)));
+
+        var taskList = new TaskList(tasks);
+        var sortedList = taskList.sorted();
+
+        assertEquals(sortedList.get(0), tasks.get(0));
+        assertEquals(sortedList.get(1), tasks.get(1));
+        assertEquals(sortedList.get(2), tasks.get(3));
+        assertEquals(sortedList.get(3), tasks.get(2));
+    }
 }
