@@ -19,6 +19,10 @@ public class DeadlineTask extends Task {
         this.deadline = deadline;
     }
 
+    boolean isBeforeOrEqual(LocalDateTime end) {
+        return !deadline.isAfter(end);
+    }
+
     @Override
     public String toString() {
         return "[D]%s (by: %s)".formatted(super.toString(), TaskUtil.formatDate(deadline));
