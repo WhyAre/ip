@@ -51,10 +51,10 @@ public class Task implements Serializable, Comparable<Task> {
     @Override
     public int compareTo(Task task) {
         if (this.datetime == null) {
-            return -1;
+            return 1;
         }
         if (task.datetime == null) {
-            return 1;
+            return -1;
         }
 
         return this.datetime.compareTo(task.datetime);
