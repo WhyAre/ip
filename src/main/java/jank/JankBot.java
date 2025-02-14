@@ -7,6 +7,7 @@ import jank.command.DeleteCommand;
 import jank.command.EventCommand;
 import jank.command.FindCommand;
 import jank.command.MarkCommand;
+import jank.command.RemindCommand;
 import jank.command.TodoCommand;
 import jank.task.DeadlineTask;
 import jank.task.EventTask;
@@ -115,6 +116,20 @@ public class JankBot {
                                              .collect(Collectors.joining("\n"));
                     yield "Here are the matching tasks in your list:\n%s".formatted(tasks);
                 }
+            }
+            case "remind" -> {
+                var c = RemindCommand.parse(line);
+                System.out.println(c);
+                var matchingTasks = tasks.remind(c.end());
+
+                if (matchingTasks.isEmpty()) {
+                    yield "You have no deadlines";
+                } else {
+                    yield matchingTasks.stream()
+                                       .map(Task::toString)
+                                       .collect(Collectors.joining("\n"));
+                }
+
             }
             case "delete" -> {
                 var c = DeleteCommand.parse(line);

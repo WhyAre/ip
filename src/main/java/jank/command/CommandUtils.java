@@ -1,5 +1,6 @@
 package jank.command;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -7,6 +8,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import jank.JankBotException;
@@ -84,6 +87,27 @@ class CommandUtils {
         } catch (DateTimeParseException e) {
             throw new JankBotException("Invalid date format. Required format is %s".formatted(expectedFormat));
         }
+    }
+
+    static Duration parseDuration(String durationString) {
+        final Pattern durationPattern = Pattern.compile(
+                "(\\d+)\\s*([dhms])"
+        );
+
+        Duration duration = Duration.ZERO;
+        Matcher matcher = durationPattern.matcher(durationString.toLowerCase());
+
+        while (matcher.find()) {
+            int value = Integer.parseInt(matcher.group(1));
+            duration = switch (matcher.group(2)) {
+                case "d" -> duration.plusDays(value);
+                case "h" -> duration.plusHours(value);
+                case "m" -> duration.plusMinutes(value);
+                case "s" -> duration.plusSeconds(value);
+                default -> duration;
+            };
+        }
+        return duration;
     }
 
 }

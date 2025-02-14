@@ -1,6 +1,7 @@
 package jank.task;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,6 +75,20 @@ public class TaskList implements Serializable {
     public List<Task> find(String query) {
         return tasks.stream()
                     .filter(task -> task.contains(query))
+                    .toList();
+    }
+
+    /**
+     * Lists all upcoming deadlines before date
+     *
+     * @param end maximum date of deadline
+     * @return list of deadlines that's within the interval
+     */
+    public List<DeadlineTask> remind(LocalDateTime end) {
+        return tasks.stream()
+                    .filter(DeadlineTask.class::isInstance)
+                    .map(DeadlineTask.class::cast)
+                    .filter(task -> task.isBeforeOrEqual(end))
                     .toList();
     }
 
