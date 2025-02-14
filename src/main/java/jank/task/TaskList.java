@@ -91,6 +91,11 @@ public class TaskList implements Serializable {
                     .toList();
     }
 
+    /**
+     * Sorts the tasks based on date
+     *
+     * @return tasks in sorted order
+     */
     public List<Task> sorted() {
         return tasks.stream().sorted().toList();
     }
