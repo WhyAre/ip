@@ -143,8 +143,8 @@ public class JankBot {
                 checkIndexInRange(c.index(), 0, tasks.size());
 
                 var output = (c.isMarked())
-                        ? "Nice! I've marked this task as done:\n%s\n".formatted(tasks.mark(c.index()))
-                        : "Nice! I've marked this task as not done yet:\n%s\n".formatted(tasks.unmark(c.index()));
+                             ? "Nice! I've marked this task as done:\n%s\n".formatted(tasks.mark(c.index()))
+                             : "Nice! I've marked this task as not done yet:\n%s\n".formatted(tasks.unmark(c.index()));
 
                 Storage.saveTasks(taskFile, tasks);
 
