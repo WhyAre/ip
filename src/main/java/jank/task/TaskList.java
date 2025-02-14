@@ -91,6 +91,10 @@ public class TaskList implements Serializable {
                     .toList();
     }
 
+    public List<Task> sorted() {
+        return tasks.stream().sorted().toList();
+    }
+
     public String getAllTasks() {
         if (tasks.isEmpty()) {
             return "There are no tasks";

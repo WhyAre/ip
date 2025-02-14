@@ -125,6 +125,15 @@ public class JankBot {
                 yield TaskUtil.tasksToPrintableFormat(matchingTasks);
 
             }
+            case "sort" -> {
+                var sortedTasks = tasks.sorted();
+
+                if (sortedTasks.isEmpty()) {
+                    yield "There are no tasks";
+                }
+                yield TaskUtil.tasksToPrintableFormat(sortedTasks);
+
+            }
             case "delete" -> {
                 var c = DeleteCommand.parse(line);
                 checkIndexInRange(c.index(), 0, tasks.size());
