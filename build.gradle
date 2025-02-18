@@ -41,7 +41,7 @@ test {
 }
 
 application {
-    mainClassName = "jank.ui.Main"
+    mainClassName = "jank.Launcher"
 }
 
 shadowJar {
