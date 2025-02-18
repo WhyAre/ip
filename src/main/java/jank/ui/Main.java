@@ -1,6 +1,8 @@
 package jank.ui;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.Objects;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,14 +15,13 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 
     @Override
     public void start(Stage stage) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/main.fxml"));
+            URL url = getClass().getResource("/main.fxml");
+            Objects.requireNonNull(url);
+            Parent root = FXMLLoader.load(url);
             var scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
