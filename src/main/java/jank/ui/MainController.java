@@ -7,10 +7,12 @@ import jank.JankBot;
 import jank.JankBotException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -24,7 +26,10 @@ public class MainController implements Initializable {
     private TextField inputbox;
 
     @FXML
-    private TextArea outputbox;
+    private ScrollPane scrollPane;
+
+    @FXML
+    private VBox outputContainer;
 
     public MainController() {
         bot = new JankBot(TASK_FILE);
@@ -41,9 +46,14 @@ public class MainController implements Initializable {
             return;
         }
 
-        outputbox.appendText("> %s\n".formatted(inputbox.getText()));
+        var userInput = inputbox.getText();
 
-        var cmd = inputbox.getText().split(" ");
+        // Create a horizontal line
+        Separator sep = new Separator();
+        // Adds user input box to the input
+        outputContainer.getChildren().addAll(sep, new DialogBox("> %s".formatted(userInput)));
+
+        var cmd = userInput.split(" ");
 
         if (cmd[0].equalsIgnoreCase("bye")) {
             Stage stage = (Stage) inputbox.getScene().getWindow();
@@ -52,9 +62,9 @@ public class MainController implements Initializable {
 
         try {
             var out = bot.executeCommand(cmd);
-            outputbox.appendText(out + "\n");
+            outputContainer.getChildren().addAll(new DialogBox(out));
         } catch (JankBotException e) {
-            outputbox.appendText(e.getMessage() + "\n");
+            outputContainer.getChildren().addAll(new DialogBox(e.getMessage()));
         }
 
         inputbox.clear();
@@ -62,6 +72,9 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        outputbox.setText(bot.greet());
+        var dialog = new DialogBox(bot.greet());
+        outputContainer.getChildren().add(dialog);
+
+        outputContainer.heightProperty().addListener((observable) -> scrollPane.setVvalue(1.0));
     }
 }
