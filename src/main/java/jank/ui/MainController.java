@@ -19,7 +19,7 @@ import javafx.stage.Stage;
  * Controls the main logic of the user interface
  */
 public class MainController implements Initializable {
-    private static final String TASK_FILE = "./data/jank.txt";
+    private static final String TASK_FILE = "./data/jank.bin";
     private final JankBot bot;
 
     @FXML
