@@ -29,7 +29,8 @@ public class Storage {
         } catch (FileNotFoundException e) {
             return new TaskList();
         } catch (Exception e) {
-            throw new IllegalStateException(e);
+            System.err.println("Error loading tasks");
+            return new TaskList();
         }
     }
 
