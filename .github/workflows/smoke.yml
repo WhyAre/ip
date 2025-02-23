@@ -1,0 +1,70 @@
+name: Test JAR on Multiple OSes
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - uses: robinraju/release-downloader@v1
+      with:
+        latest: true
+        fileName: 'jank.jar'
+
+    # Run the JAR file on Linux
+    - name: Run the JAR file on Linux
+      if: runner.os == 'Linux'
+      run: |
+        xvfb-run java -jar jank.jar &
+        pid=$!
+        # Wait for the process to start up
+        sleep 10
+        # Check if the process is still running
+        if ! ps -p $pid > /dev/null; then
+          echo "The JAR file did not run successfully."
+          exit 1
+        fi
+
+    # Run the JAR file on Linux and macOS (combined block)
+    - name: Run the JAR file on macOS
+      if: runner.os == 'macOS'
+      run: |
+        java -jar jank.jar &
+        pid=$!
+        # Wait for the process to start up
+        sleep 10
+        # Check if the process is still running
+        if ! ps -p $pid > /dev/null; then
+          echo "The JAR file did not run successfully."
+          exit 1
+        fi
+
+    # Run the JAR file on Windows using PowerShell and PassThru
+    - name: Run the JAR file on Windows (PowerShell)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        # Start the JAR file using Start-Process and capture the process object with PassThru
+        $process = Start-Process -NoNewWindow -FilePath "java" -ArgumentList "-jar", "jank.jar" -PassThru
+        # We give it 10 seconds for the GUI to start
+        Start-Sleep -Seconds 10
+        # Check if the process is still running using the captured PID
+        if (-not (Get-Process -Id $process.Id -ErrorAction SilentlyContinue)) {
+          Write-Error "The JAR file did not run successfully."
+          exit 1
+        }
